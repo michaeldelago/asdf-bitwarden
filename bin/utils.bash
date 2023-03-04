@@ -5,7 +5,8 @@ download () {
   local -r download_path="$2"
 
   echo "Downloading ${toolname} version ${ASDF_INSTALL_VERSION} from ${download_url}"
-  if ! curl -fsL "${download_url}" -o "${download_path}"; then
+  curl -fsL "${download_url}" -o "${download_path}"
+  if [[ ! "$?" ]] ; then
     echo "Error: ${toolname} version ${ASDF_INSTALL_VERSION} not found" >&2
     exit 1
   fi
