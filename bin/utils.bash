@@ -17,7 +17,8 @@ get_download_url () {
   local -r repository="$(get_repository "$version")"
   [[ "$version" == "latest" ]] && \
     versions=("$(get_versions "$repository")") && \
-    version="$(get_latest_version "${versions[@]}")"
+    version="$(get_latest_version "${versions[@]}")" && \
+    version="cli-v$version"
 
   local -r arch="$(get_arch)"
   printf "https://github.com/%s/releases/download/%s/%s-%s-%s.zip\n" \
@@ -44,9 +45,7 @@ get_versions() {
     grep "tag_name" | \
     cut -f 4 -d \" | \
     grep -E "^(cli-)?v" | \
-    while read -r version; do
-      echo "${version}"
-    done | \
+    grep -oE "[0-9\.]+" | \
     tac
 }
 
