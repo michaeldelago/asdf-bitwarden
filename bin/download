@@ -4,7 +4,8 @@ set -euo pipefail
 source "$(dirname -- "$0")/constants.bash"
 source "$(dirname -- "$0")/utils.bash"
 
-: "${ASDF_DOWNLOAD_PATH?}"
+download_path="${ASDF_DOWNLOAD_PATH:-$(mktemp -d -t "asdf_${toolname}_XXXXXX")}"
+[[ -z "$ASDF_DOWNLOAD_PATH" ]] && trap 'rm -rf "${TMP_DOWNLOAD_DIR?}"' EXIT
 
 do_download () {
   local -r install_type="$1"
