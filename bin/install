@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
-
-set \
-  -o nounset \
-  -o pipefail \
-  -o errexit
+set -euo pipefail
 
 # required environment variables
-: ${ASDF_INSTALL_TYPE?}
-: ${ASDF_INSTALL_VERSION?}
-: ${ASDF_INSTALL_PATH?}
+: "${ASDF_INSTALL_TYPE?}"
+: "${ASDF_INSTALL_VERSION?}"
+: "${ASDF_INSTALL_PATH?}"
 
-readonly repository="bitwarden/cli"
+# As of may 25, 2022, bitwarden/cli is archived
+readonly old_repository="bitwarden/cli"
+readonly repository="bitwarden/clients"
 readonly toolname="bw"
 
 # make a temporary download directory with a cleanup hook
@@ -50,7 +48,13 @@ get_arch () {
 get_download_url () {
   local -r version="$1"
   local -r arch="$(get_arch)"
-  echo "https://github.com/$repository/releases/download/$version/${toolname}-${arch}-${version/v}.zip"
+  local repo="$old_repository"
+  local version_prefix=""
+  [[ ! "$version" = v1.* ]] && \
+    version_prefix="cli-" && \
+    repo="$repository"
+  printf "https://github.com/%s/releases/download/%s/%s-%s-%s.zip\n" \
+    "$repo" "$version_prefix$version" "$toolname" "$arch" "${version/v}"
 }
 
 install "${ASDF_INSTALL_TYPE}" "${ASDF_INSTALL_VERSION}" "${ASDF_INSTALL_PATH}"
