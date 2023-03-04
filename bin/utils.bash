@@ -12,13 +12,15 @@ download () {
 }
 
 get_download_url () {
-  local version="$1"
+  local version="v$1"
 
   local -r repository="$(get_repository "$version")"
   [[ "$version" == "latest" ]] && \
     versions=("$(get_versions "$repository")") && \
-    version="$(get_latest_version "${versions[@]}")" && \
-    version="cli-v$version"
+    version="$(get_latest_version "${versions[@]}")"
+
+  [[ "$repository" == "bitwarden/clients" ]] && \
+    version="cli-$version"
 
   local -r arch="$(get_arch)"
   printf "https://github.com/%s/releases/download/%s/%s-%s-%s.zip\n" \
