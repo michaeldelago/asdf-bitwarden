@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source "$(dirname -- "$0")/constants.sh"
-source "$(dirname -- "$0")/utils.sh"
+source "$(dirname -- "$0")/constants.bash"
+source "$(dirname -- "$0")/utils.bash"
 
 readonly GITHUB_API_TOKEN=${GITHUB_API_TOKEN:-}
 readonly GITHUB_TOKEN=${GITHUB_TOKEN:-$GITHUB_API_TOKEN}
@@ -13,23 +13,7 @@ if [ -n "${GITHUB_TOKEN:-}" ]; then
   oauth_header=("-H" "Authorization: token $GITHUB_TOKEN")
 fi
 
-# hit the github api to get tags
-get_versions() {
-  local repo="$1"
-  local prefix=${2:-}
-
-  curl -s "${oauth_header[@]}" "https://api.github.com/repos/$repo/releases" | \
-    cat | \
-    grep "tag_name" | \
-    cut -f 4 -d \" | \
-    grep -E "^$prefix" | \
-    while read -r version; do
-      echo "${version#"$prefix"}"
-    done | \
-    tac
-}
-
-old_versions=$(get_versions "$old_repository" "")
-versions=$(get_versions "$repository" "cli-")
+old_versions=$(get_versions "$old_repository")
+versions=$(get_versions "$repository")
 echo "$old_versions"
 echo "$versions"

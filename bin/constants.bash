@@ -6,3 +6,4 @@
 toolname="bw"
 old_repository="bitwarden/cli"
 repository="bitwarden/clients"
+prefix="cli-"
