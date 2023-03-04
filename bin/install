@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ASDF_DOWNLOAD_PATH=""
-
 source "$(dirname -- "$0")/constants.bash"
 source "$(dirname -- "$0")/utils.bash"
 
