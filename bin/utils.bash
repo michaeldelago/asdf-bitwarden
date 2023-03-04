@@ -27,10 +27,8 @@ get_download_url () {
 
 get_repository () {
   case "$1" in 
-    v1.*   )  echo "$old_repository" ;;
-    cli-v* )  echo "$repository" ;;
-    latest )  echo "$repository" ;;
-    *      )  echo "can't map version to repository" && return 1
+    1.* )  echo "$old_repository" ;;
+    *   )  echo "$repository" ;;
   esac
 }
 
